@@ -1,0 +1,5 @@
+MCP_Exercise/
+__pycache__/
+*.pyc
+.env
+data/

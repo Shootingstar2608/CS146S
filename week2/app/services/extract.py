@@ -6,6 +6,7 @@ from typing import List
 import json
 from typing import Any
 from ollama import chat
+from pydantic import BaseModel
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -87,3 +88,56 @@ def _looks_imperative(sentence: str) -> bool:
         "investigate",
     }
     return first.lower() in imperative_starters
+
+
+# TODO 1: LLM-powered action item extraction 
+
+class ActionItems(BaseModel):
+    """Pydantic schema to enforce structured JSON output from the LLM."""
+    items: List[str]
+
+
+def extract_action_items_llm(text: str, model: str = "llama3.2") -> List[str]:
+    """Extract action items from free-form text using an Ollama LLM.
+
+    Args:
+        text: The free-form note text to extract action items from.
+        model: The Ollama model to use (default: llama3.2).
+
+    Returns:
+        A list of action item strings extracted by the LLM.
+    """
+    # Edge case: empty or whitespace-only input
+    if not text or not text.strip():
+        return []
+
+    try:
+        response = chat(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a task extraction assistant. "
+                        "Given free-form notes, extract all actionable items. "
+                        "Return a JSON object with an 'items' field containing "
+                        "an array of strings. Each string is one concise action item. "
+                        "If there are no action items, return {\"items\": []}."
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": text,
+                },
+            ],
+            format=ActionItems.model_json_schema(),
+        )
+
+        # Parse the structured JSON response
+        result = ActionItems.model_validate_json(response.message.content)
+        return result.items
+
+    except Exception as e:
+        # Fallback: if LLM call fails, return empty list and log the error
+        print(f"[extract_action_items_llm] Error: {e}")
+        return []
