@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from tools import setup_tools
 
 load_dotenv()
-
+#fixed lan cuoi
 # Setup logging
 logging.basicConfig(
     stream=sys.stderr, # MUST be stderr for STDIO transport to work correctly

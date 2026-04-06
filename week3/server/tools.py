@@ -3,6 +3,7 @@ import logging
 from typing import Any, Dict, List, Optional
 from mcp.server.fastmcp import FastMCP
 
+# Quan & Huy fixed
 # We setup logging here, but configure handlers in main
 logger = logging.getLogger(__name__)
 
