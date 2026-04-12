@@ -10,9 +10,44 @@ async function loadNotes() {
   const notes = await fetchJSON('/notes/');
   for (const n of notes) {
     const li = document.createElement('li');
-    li.textContent = `${n.title}: ${n.content}`;
+    const textSpan = document.createElement('span');
+    textSpan.textContent = `${n.title}: ${n.content}`;
+    li.appendChild(textSpan);
+
+    const btnGroup = document.createElement('span');
+    btnGroup.className = 'btn-group';
+
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edit';
+    editBtn.className = 'btn-edit';
+    editBtn.onclick = () => openEditModal(n);
+    btnGroup.appendChild(editBtn);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.className = 'btn-delete';
+    deleteBtn.onclick = async () => {
+      if (confirm(`Delete note "${n.title}"?`)) {
+        await fetch(`/notes/${n.id}`, { method: 'DELETE' });
+        loadNotes();
+      }
+    };
+    btnGroup.appendChild(deleteBtn);
+
+    li.appendChild(btnGroup);
     list.appendChild(li);
   }
+}
+
+function openEditModal(note) {
+  document.getElementById('edit-note-id').value = note.id;
+  document.getElementById('edit-title').value = note.title;
+  document.getElementById('edit-content').value = note.content;
+  document.getElementById('edit-modal').style.display = 'flex';
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').style.display = 'none';
 }
 
 async function loadActions() {
@@ -60,6 +95,22 @@ window.addEventListener('DOMContentLoaded', () => {
     e.target.reset();
     loadActions();
   });
+
+  document.getElementById('edit-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('edit-note-id').value;
+    const title = document.getElementById('edit-title').value;
+    const content = document.getElementById('edit-content').value;
+    await fetchJSON(`/notes/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, content }),
+    });
+    closeEditModal();
+    loadNotes();
+  });
+
+  document.getElementById('edit-cancel').addEventListener('click', closeEditModal);
 
   loadNotes();
   loadActions();
