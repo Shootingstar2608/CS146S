@@ -9,7 +9,7 @@ Fill out all of the `TODO`s in this file.
 
 ## SUBMISSION DETAILS
 
-Name: **Đỗ Hồng Phúc, Nguyễn Phúc Huy, Lê Thanh Tân, Nguyễn Đức Quân** \
+Name: **Team 2: Đỗ Hồng Phúc, Nguyễn Phúc Huy, Lê Thanh Tân, Nguyễn Đức Quân** \
 Citations: Claude Code best practices (https://www.anthropic.com/engineering/claude-code-best-practices), SubAgents documentation (https://docs.anthropic.com/en/docs/claude-code/sub-agents)
 
 This assignment took us about **10** hours to do.
