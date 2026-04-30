@@ -1,35 +1,73 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Modern Software Dev Starter</title>
+    <meta name="description" content="Notes and Action Items manager with full CRUD, search, and bulk operations." />
+    <title>Notes & Actions — Week 5</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
+    <header>
+      <h1>📝 Notes & Actions</h1>
+      <p>Modern Software Dev Starter — Week 5</p>
+    </header>
     <main>
-      <h1>Modern Software Dev Starter</h1>
-
-      <section>
-        <h2>Notes</h2>
+      <section class="card" id="notes-section">
+        <h2><span class="icon">📋</span> Notes</h2>
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input id="note-search" type="text" placeholder="Search notes…" />
+        </div>
         <form id="note-form">
-          <input id="note-title" placeholder="Title" required />
-          <input id="note-content" placeholder="Content" required />
-          <button type="submit">Add</button>
+          <div class="row">
+            <input id="note-title" placeholder="Title" required />
+          </div>
+          <div class="row">
+            <input id="note-content" placeholder="Content (#hashtags, - [ ] tasks)" required />
+            <button type="submit" class="btn-primary">＋ Add</button>
+          </div>
         </form>
         <ul id="notes"></ul>
       </section>
 
-      <section>
-        <h2>Action Items</h2>
+      <section class="card" id="actions-section">
+        <h2><span class="icon">✅</span> Action Items</h2>
+        <div class="filter-bar" id="action-filters">
+          <button class="active" data-filter="all">All</button>
+          <button data-filter="open">Open</button>
+          <button data-filter="done">Done</button>
+        </div>
+        <div class="bulk-bar" id="bulk-bar">
+          <span id="bulk-count">0 selected</span>
+          <button class="btn-success btn-sm" id="bulk-complete-btn">✓ Complete</button>
+        </div>
         <form id="action-form">
-          <input id="action-desc" placeholder="Description" required />
-          <button type="submit">Add</button>
+          <div class="row">
+            <input id="action-desc" placeholder="New action item…" required />
+            <button type="submit" class="btn-primary">＋ Add</button>
+          </div>
         </form>
         <ul id="actions"></ul>
       </section>
     </main>
 
+    <div class="modal-overlay" id="edit-modal">
+      <div class="modal">
+        <h3>Edit Note</h3>
+        <form id="edit-form">
+          <input id="edit-title" placeholder="Title" required />
+          <input id="edit-content" placeholder="Content" required />
+          <input id="edit-id" type="hidden" />
+          <div class="modal-actions">
+            <button type="button" class="btn-ghost" id="edit-cancel">Cancel</button>
+            <button type="submit" class="btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toasts"></div>
     <script src="/static/app.js"></script>
   </body>
 </html>

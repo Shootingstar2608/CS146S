@@ -5,11 +5,15 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from .db import apply_seed_if_needed, engine
+from .error_handlers import register_error_handlers
 from .models import Base
 from .routers import action_items as action_items_router
 from .routers import notes as notes_router
 
 app = FastAPI(title="Modern Software Dev Starter (Week 5)")
+
+# Register global error handlers for consistent JSON envelopes
+register_error_handlers(app)
 
 # Ensure data dir exists
 Path("data").mkdir(parents=True, exist_ok=True)
